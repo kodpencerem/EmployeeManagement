@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@using EmployeeManagement.Common.SessionOperations
+@*@inject SignInManager<IdentityUser> SignInManager
+    @inject UserManager<IdentityUser> UserManager*@
+@inject SignInManager<EmployeeManagement.Data.DbModels.Employee> SignInManager
+@inject UserManager<EmployeeManagement.Data.DbModels.Employee> UserManager
+@*@inject IHttpContextAccessor HttpContextAccessor*@
+
+@*Session : @HttpContextAccessor.HttpContext.Session.GetString("AppUserInfoSession");*@
+
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+        @await Component.InvokeAsync("UserName")</a>
+    </li>
+    <li class="nav-item">
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button type="submit" class="btn btn-danger text-white" style="margin-top: 2px; margin-left: 5px">Çıkış Yap</button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Register">Kaydol</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login">Giriş Yap</a>
+    </li>
+}
+

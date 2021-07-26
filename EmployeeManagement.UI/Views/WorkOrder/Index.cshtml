@@ -1,0 +1,155 @@
+﻿@*@model IEnumerable<EmployeeManagement.Common.VModels.WorkOrderVM>*@
+
+@model EmployeeManagement.Common.PagingListModels.PaginatedList<EmployeeManagement.Common.VModels.WorkOrderVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="page-header">
+    <h3>
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            İş Emri Listesi
+        </small>
+    </h3>
+</div>
+
+
+<br />
+<div class="col-6 text-left text-white">
+    <a class="btn btn-success" asp-controller="WorkOrder" asp-action="Create">İş Emri Ekle</a>
+</div>
+<br />
+
+@await Component.InvokeAsync("EmployeeList")
+
+<br />
+<br />
+<div class="row">
+    <div class="col-xs-12">
+        <table id="workOrderListTable" class="table  table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>İş Emri Numarası</th>
+                    <th>Oluşturulma Tarihi</th>
+                    <th>İş Emri Durumu</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td> @item.WorkOrderNumber</td>
+                            <td>@item.CreateDate.ToShortDateString()</td>
+                            <td>@item.WorkOrderStatusText</td>
+                            <td>
+                                <div class="hidden-sm hidden-xs btn-group">
+                                    <a class="btn btn-xs btn-info" asp-controller="WorkOrder" asp-action="Edit" asp-route-id="@item.Id">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </a>
+                                    <a class="btn btn-xs btn-danger" id="btnRemoves" data-id="@item.Id">
+                                        <i class="ace-icon fa fa-trash bigger-120"></i>
+                                    </a>
+                                    <button class="btn btn-xs btn-warning">
+                                        <i class="ace-icon fa fa-flag bigger-120"></i>
+                                    </button>
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td>Data Bulunamadı!</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div><!-- /.span -->
+</div>
+
+
+@{
+    var prevDisabled = !Model.PreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.NextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-pageNumber="@(Model.PageIndex-1)"
+   class="btn btn-success @prevDisabled">
+    Önceki Sayfa
+</a>
+
+<a asp-action="Index"
+   asp-route-pageNumber="@(Model.PageIndex+1)"
+   class="btn btn-info @nextDisabled">
+    Sonraki Sayfa
+</a>
+
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#btnRemoves").on("click", function () {
+                var id = $("#btnRemoves").data("id");
+
+                swal({
+                    title: 'Silmek İstediğinize Emin Misiniz?',
+                    text: 'Silinen Data Geri Alınamaz!',
+                    icon: 'warning',
+                    buttons: true,
+                    dangerMode: true
+                }).then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: "/WorkOrder/Delete/" + id,
+                            success: function (data) {
+                                if (data.success) {
+                                    toastr.success(data.message);
+                                    location.reload();
+                                } else {
+                                    toastr.error(data.message);
+                                }
+                            }
+
+                        });
+                    }
+                });
+            });
+
+            $("#AssignEmployeeId").on("change", function () {
+                //alert("Hebele");
+                var Id= $("#AssignEmployeeId").val();
+
+                    $.ajax({
+                            type: "DELETE",
+                            url: "/WorkOrder/GetWorkOrderByEmployeeId/"+Id,
+                            success: function (data) {
+                                if (data.isSuccess) {
+                                    window.location.href = "?employeeId=" + Id;
+                                    toastr.success(data.message);
+                                } else {
+                                    //toastr.error(data.message);
+                                }
+                            }
+
+                        });
+
+            });
+
+        });
+
+        function ChangeEmployeeByWorkOrder(employeeId) { alert(employeeId); }
+    </script>
+}
+

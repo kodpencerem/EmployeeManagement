@@ -1,0 +1,57 @@
+﻿@model EmployeeManagement.Common.VModels.WorkOrderVM
+
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<form class="form-horizontal" asp-action="Create" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" asp-for="WorkOrderPoint">İş Emri Puanı</label>
+        <div class="col-sm-9">
+            <input asp-for="WorkOrderPoint" type="number" min="0" max="15" id="form-field-1" placeholder="iş Emri Puanı" class="col-xs-10 col-sm-5" />
+            <span asp-validation-for="WorkOrderPoint"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" asp-for="WorkOrderDescription">İş Emri Açıklaması</label>
+        <div class="col-sm-4">
+            <textarea class="form-control limited" asp-for="WorkOrderDescription" maxlength="2750"></textarea>
+            <span asp-validation-for="WorkOrderDescription"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" asp-for="PhotoPath">Fotoğraf</label>
+        <div class="col-sm-9 custom-file">
+            <div class="col-sm-5">
+                <input asp-for="PhotoPath" class="col-xs-10 col-sm-5 custom-file-input form-control" id="form-field-1" placeholder="Fotoğraf Seçiniz" />
+                <span asp-validation-for="PhotoPath"></span>
+            </div>
+        </div>
+    </div>
+   <custom-list></custom-list>
+
+    <div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
+            <input type="submit" value="İş Emri Oluştur" class="btn btn-info col-xs-3" />
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/jquery.inputlimiter.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+
+            $('textarea.limited').inputlimiter({
+                remText: '%n karakter %s kaldı...',
+                limitText: 'Maksimumum limit: %n.'
+            });
+        });
+    </script>
+}

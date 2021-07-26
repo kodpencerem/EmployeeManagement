@@ -1,0 +1,55 @@
+﻿@model EmployeeManagement.Common.VModels.WorkOrderVM
+
+
+@{
+    ViewBag.Title = "WorkOrderDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<hr />
+<h3>Personel İş Emirleri Kaydı Detay Bilgileri Formu</h3>
+<hr />
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            İş Emri Numarası:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WorkOrderNumber)
+        </dd>
+
+        <dt>
+            Oluşturulma Tarihi:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateDate)
+        </dd>
+
+        <dt>
+            İş Emri Durumu:
+        </dt>
+
+        <dd class="text text-success">
+            @Html.DisplayFor(model => model.WorkOrderStatusText)
+        </dd>
+
+        <dt>
+            Açıklama:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WorkOrderDescription)
+        </dd>
+
+        <dt>
+            Puan Durumu:
+        </dt>
+
+        <dd class="text-danger">
+            @Html.DisplayFor(model => model.WorkOrderPoint)
+        </dd>
+
+    </dl>
+</div>
